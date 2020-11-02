@@ -19,6 +19,7 @@ public class Dictionary<K, V> {
   }
 
   V put(K key, V value) {
+
     if (key == null)
       throw new NullPointerException("Key can't be null");
 

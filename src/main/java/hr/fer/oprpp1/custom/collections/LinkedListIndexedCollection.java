@@ -150,7 +150,6 @@ public class LinkedListIndexedCollection<E> implements List<E> {
    */
   @Override
   public E[] toArray() {
-    System.out.println("VELIČINA JE " + size);
     var arr = new Object[size];
     var n = first;
     int i = 0;

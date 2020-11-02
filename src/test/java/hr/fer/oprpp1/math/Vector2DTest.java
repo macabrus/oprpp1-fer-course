@@ -47,12 +47,25 @@ class Vector2DTest {
 
   @Test
   void rotated() {
-    var v1 = new Vector2D(1, 1);
-    var v2 = v1.rotated(PI / 4);
-    assertEquals(1, v1.getX());
-    assertEquals(1, v1.getY());
-    assertEquals(0, v2.getX(), 0.001);
-    assertEquals(sqrt(2), v2.getY(), 0.001);
+    var northeast = new Vector2D(1,1);
+    assertEquals(1, northeast.getX(), 0.001);
+    assertEquals(1, northeast.getY(), 0.001);
+
+    var north = northeast.rotated(PI/4);
+    assertEquals(0, north.getX(), 0.001);
+    assertEquals(sqrt(2), north.getY(), 0.001);
+
+    var northwest = north.rotated(PI/4);
+    assertEquals(-1, northwest.getX(), 0.001);
+    assertEquals(1, northwest.getY(), 0.001);
+
+    var west = northwest.rotated(PI/4);
+    assertEquals(-sqrt(2), west.getX(), 0.001);
+    assertEquals(0, west.getY(), 0.001);
+
+    var south = west.rotated(PI/2);
+    assertEquals(0, south.getX(), 0.001);
+    assertEquals(-sqrt(2), south.getY(), 0.001);
   }
 
   @Test

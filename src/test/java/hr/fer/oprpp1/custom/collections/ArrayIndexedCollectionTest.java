@@ -204,7 +204,6 @@ class ArrayIndexedCollectionTest {
     col.add(a);
     col.add(b);
     col.toArray();
-    col.forEach(System.out::println);
     col.forEach((Object o) -> { });
     assertFalse(col.contains("test"));
     assertTrue(col.contains(b));

@@ -29,7 +29,7 @@ public class Vector2D {
   }
 
   public void rotate(double angle) {
-    double newAngle = Math.atan2(y, x);
+    double newAngle = Math.atan2(y, x) + angle;
     double magnitude = Math.hypot(x, y);
     x = Math.cos(newAngle) * magnitude;
     y = Math.sin(newAngle) * magnitude;

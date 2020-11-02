@@ -91,12 +91,9 @@ class LinkedListIndexedCollectionTest {
     var col = new LinkedListIndexedCollection<A>();
     col.add(a);
     col.add(b);
-    //col.forEach(System.out::println);
     col.forEach((Object o) -> { });
     assertFalse(col.contains("test"));
     assertTrue(col.contains(b));
-    System.out.println(Arrays.toString(arr));
-    System.out.println(Arrays.toString(col.toArray()));
     assertArrayEquals(arr, col.toArray());
     assertArrayEquals(arr, new LinkedListIndexedCollection<>(col).toArray());
   }

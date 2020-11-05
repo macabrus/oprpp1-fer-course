@@ -17,12 +17,9 @@ import static org.junit.jupiter.api.Assertions.*;
 class SmartScriptParserTest {
 
   private String read(String exampleName) {
-    var examplesPath = SmartScriptParserTest.class.getResource("/document_examples").getPath();
-    var extrasPath = SmartScriptParserTest.class.getResource("/extra").getPath();
+    var extrasPath = SmartScriptParserTest.class.getResource("/smart_script").getPath();
     try {
-      if (!Files.exists(Path.of(examplesPath, exampleName)))
-        return Files.readString(Path.of(extrasPath, exampleName));
-      return Files.readString(Path.of(examplesPath, exampleName));
+      return Files.readString(Path.of(extrasPath, exampleName));
     } catch (IOException e) {
       e.printStackTrace();
     }
@@ -30,9 +27,9 @@ class SmartScriptParserTest {
   }
 
   private String readExample(int n) {
-    try(InputStream is = this.getClass().getClassLoader().getResourceAsStream("extra/primjer"+n+".txt")) {
+    try(InputStream is = this.getClass().getClassLoader().getResourceAsStream("smart_script/primjer" + n +".txt")) {
       if(is==null) throw new RuntimeException("Datoteka extra/primjer"+n+".txt je nedostupna.");
-      byte[] data = this.getClass().getClassLoader().getResourceAsStream("extra/primjer" + n + ".txt").readAllBytes();
+      byte[] data = this.getClass().getClassLoader().getResourceAsStream("smart_script/primjer" + n + ".txt").readAllBytes();
       String text = new String(data, StandardCharsets.UTF_8);
       return text;
     } catch(IOException ex) {

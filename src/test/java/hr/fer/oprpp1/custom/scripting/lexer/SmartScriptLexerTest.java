@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class SmartScriptLexerTest {
 
   private String read(String exampleName) {
-    var realPath = SmartScriptLexerTest.class.getResource("/document_examples").getPath();
+    var realPath = getClass().getResource("/smart_script").getPath();
     try {
       return Files.readString(Path.of(realPath, exampleName));
     } catch (IOException e) {

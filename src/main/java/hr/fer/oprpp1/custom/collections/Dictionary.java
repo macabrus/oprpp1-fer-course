@@ -6,19 +6,19 @@ public class Dictionary<K, V> {
 
   private final ArrayIndexedCollection<Pair<K,V>> elements = new ArrayIndexedCollection<>();
 
-  boolean isEmpty() {
+  public boolean isEmpty() {
     return elements.isEmpty();
   }
 
-  int size() {
+  public int size() {
     return elements.size();
   }
 
-  void clear() {
+  public void clear() {
     elements.clear();
   }
 
-  V put(K key, V value) {
+  public V put(K key, V value) {
 
     if (key == null)
       throw new NullPointerException("Key can't be null");
@@ -38,7 +38,7 @@ public class Dictionary<K, V> {
     return ret;
   }
 
-  V get(Object key) {
+  public V get(Object key) {
     var iter = elements.createElementsGetter();
     while (iter.hasNextElement()) {
       var elem = iter.getNextElement();
@@ -49,7 +49,7 @@ public class Dictionary<K, V> {
     return null;
   }
 
-  V remove(K key) {
+  public V remove(K key) {
     for(int i = 0; i < elements.size(); i++) {
       var e = elements.get(i);
       if (e.getKey().equals(key)) {

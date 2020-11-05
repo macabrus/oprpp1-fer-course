@@ -1,6 +1,6 @@
 package hr.fer.oprpp1.custom.collections;
 
-public class ObjectStack {
+public class ObjectStack<T> {
 
   /**
    * @return true if collection contains no objects and false otherwise. Implement it here to determine result by
@@ -22,7 +22,7 @@ public class ObjectStack {
    * @param value a value to be added to stack
    * @throws NullPointerException if passed null
    */
-  public void push(Object value) {
+  public void push(T value) {
     if (value == null)
       throw new NullPointerException();
 
@@ -34,7 +34,7 @@ public class ObjectStack {
    * @return popped element from stack
    * @throws EmptyStackException if stack is empty
    */
-  public Object pop() {
+  public T pop() {
     if (size() == 0)
       throw new EmptyStackException();
 
@@ -49,7 +49,7 @@ public class ObjectStack {
    * @return last element on stack
    * @throws EmptyStackException if stack is empty
    */
-  public Object peek() {
+  public T peek() {
     return elements.get(elements.size() - 1);
   }
 
@@ -60,6 +60,6 @@ public class ObjectStack {
     elements.clear();
   }
 
-  private final ArrayIndexedCollection elements = new ArrayIndexedCollection();
+  private final ArrayIndexedCollection<T> elements = new ArrayIndexedCollection<>();
 
 }

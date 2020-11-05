@@ -1,5 +1,7 @@
 package hr.fer.oprpp1.math;
 
+import static java.lang.Math.*;
+
 public class Vector2D {
 
   private double x;
@@ -19,6 +21,14 @@ public class Vector2D {
     return y;
   }
 
+  public double getMagnitude() {
+    return hypot(x, y);
+  }
+
+  public Vector2D getUnitVector() {
+    return scaled(1 / getMagnitude());
+  }
+
   public void add(Vector2D offset) {
     x += offset.getX();
     y += offset.getY();
@@ -28,8 +38,12 @@ public class Vector2D {
     return new Vector2D(x + offset.getX(), y + offset.getY());
   }
 
+  public double getAngle() {
+    return Math.atan2(y, x);
+  }
+
   public void rotate(double angle) {
-    double newAngle = Math.atan2(y, x) + angle;
+    double newAngle = getAngle() + angle;
     double magnitude = Math.hypot(x, y);
     x = Math.cos(newAngle) * magnitude;
     y = Math.sin(newAngle) * magnitude;

@@ -1,20 +1,18 @@
 package hr.fer.zemris.lsystems.impl.demo;
 
 import hr.fer.zemris.lsystems.LSystem;
-import hr.fer.zemris.lsystems.LSystemBuilder;
 import hr.fer.zemris.lsystems.LSystemBuilderProvider;
-import hr.fer.zemris.lsystems.Painter;
 import hr.fer.zemris.lsystems.gui.LSystemViewer;
 import hr.fer.zemris.lsystems.impl.LSystemBuilderImpl;
 
-import java.awt.Color;
+import java.io.IOException;
 
-public class Main {
+public class Glavni {
 
   public static void main(String[] args) {
-    LSystemViewer.showLSystem(createKochCurve(LSystemBuilderImpl::new));
-    //LSystemViewer.showLSystem(createKochCurve2(LSystemBuilderImpl::new));
+    LSystemViewer.showLSystem(example("plant3", LSystemBuilderImpl::new));
   }
+
   private static LSystem createKochCurve(LSystemBuilderProvider provider) {
     return provider.createLSystemBuilder()
       .registerCommand('F', "draw 1")
@@ -45,5 +43,21 @@ public class Main {
       "production F F+F--F+F"
     };
     return provider.createLSystemBuilder().configureFromText(data).build();
+  }
+
+  private static LSystem example(String name, LSystemBuilderProvider provider) {
+    try {
+      return provider.createLSystemBuilder()
+        .configureFromText(new String(
+          Glavni.class
+            .getResourceAsStream(String
+              .format("/fractals/%s.txt", name))
+            .readAllBytes())
+          .split(System.lineSeparator()))
+        .build();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    return null;
   }
 }

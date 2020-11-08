@@ -25,8 +25,11 @@ public class StudentDatabase {
     }
   }
 
-  public StudentRecord forJMBAG(String jmbag) {
-    return jmbagIndex.get(jmbag);
+  public List<StudentRecord> forJMBAG(String jmbag) {
+    var res = jmbagIndex.get(jmbag);
+    if (res == null)
+      return new ArrayList<>();
+    return List.of(res);
   }
 
   public List<StudentRecord> filter(IFilter filter) {

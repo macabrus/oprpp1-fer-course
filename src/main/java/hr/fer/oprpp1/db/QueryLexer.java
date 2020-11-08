@@ -1,6 +1,10 @@
 package hr.fer.oprpp1.db;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static hr.fer.oprpp1.db.TokenType.*;
 
@@ -9,40 +13,65 @@ import static hr.fer.oprpp1.db.TokenType.*;
  */
 public class QueryLexer {
 
+  // token types map
+  private Map<String, TokenType> tokenMap = new HashMap<>() {{
+    put("<", LT);
+    put(">", GT);
+    put("<=", LTE);
+    put(">=", GTE);
+    put("=", EQ);
+    put("\\s+LIKE\\s+", LIKE);
+    put("(?i)and", CONJUNCTION);
+    put("\"[^\"]*\"", STRING);
+    put("\\w+", VAR);
+  }};
+
+  // expressions for tokens, order matters
+  private static final String[] expressions = {
+    "<=",
+    ">=",
+    "<",
+    ">",
+    "=",
+    "\\s+LIKE\\s+", // requires spaces around, otherwise could be grouped as word
+    "(?i)and",
+    "\"[^\"]*\"",
+    "\\w+"
+  };
   private Scanner sc;
+  private String query;
 
   public QueryLexer(String query) {
     sc = new Scanner(query);
+    this.query = query;
   }
 
   public boolean hasNextToken() {
-    return sc.hasNext();
+    return query.length() > 0;
   }
 
   public Token nextToken() {
-    if (sc.hasNext("="))
-      return new Token(EQ, sc.next("="));
-    if (sc.hasNext("<"))
-      return new Token(LT, sc.next("<"));
-    if (sc.hasNext(">"))
-      return new Token(GT, sc.next(">"));
-    if (sc.hasNext("<="))
-      return new Token(LTE, sc.next("<="));
-    if (sc.hasNext(">="))
-      return new Token(GTE, sc.next(">="));
-    if (sc.hasNext("!="))
-      return new Token(NEQ, sc.next("!="));
-    if (sc.hasNext("\\s*LIKE\\s*"))
-      return new Token(LIKE, sc.next("LIKE"));
-    if (sc.hasNext("(?i)\\s*and\\s*"))
-      return new Token(CONJUNCTION, sc.next());
-    if (sc.hasNext("\\s*\"[^\"\\s]*\"")) {
-      var str = sc.next();
-      return new Token(STRING, str.substring(1, str.length() - 1));
+    TokenType type = null;
+    String value = null;
+    while (query.length() > 0) {
+      boolean match = false;
+      for (String expr : expressions) {
+        Pattern p = Pattern.compile(expr);
+        Matcher m = p.matcher(query);
+        if (m.find() && m.start() == 0) {
+          type = tokenMap.get(expr);
+          value = m.group(0);
+          query = query.replaceFirst(expr, "");
+          match = true;
+          break;
+        }
+      }
+      if (match)
+        break;
+      else
+        query = query.substring(1);
     }
-    if (sc.hasNextInt())
-      return new Token(NUM, sc.next());
-    return new Token(VAR, sc.next());
+    return new Token(type, value);
   }
 
 }

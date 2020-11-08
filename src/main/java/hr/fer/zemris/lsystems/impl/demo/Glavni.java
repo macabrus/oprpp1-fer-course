@@ -10,7 +10,8 @@ import java.io.IOException;
 public class Glavni {
 
   public static void main(String[] args) {
-    LSystemViewer.showLSystem(example("plant3", LSystemBuilderImpl::new));
+    //LSystemViewer.showLSystem(example("plant1", LSystemBuilderImpl::new));
+    LSystemViewer.showLSystem(createKochCurve2(LSystemBuilderImpl::new));
   }
 
   private static LSystem createKochCurve(LSystemBuilderProvider provider) {

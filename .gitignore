@@ -1,5 +1,6 @@
-/hw*-0036514720.iml
+/*.iml
 /.idea/
 /target/
 **/*.pdf
 /*.zip
+**/*.DS_Store

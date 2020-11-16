@@ -94,7 +94,7 @@ class LSystemImpl implements LSystem {
     var actions = generate(i);
     int j = 0;
     for (char c : actions.toCharArray()) {
-      System.out.println("COMMAND IS " + c);
+      //System.out.println("COMMAND IS " + c);
       var cmd = commands.get(c);
       if (cmd != null)
         cmd.execute(ctx, painter);

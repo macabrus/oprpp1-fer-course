@@ -21,7 +21,7 @@ public class DrawCommand implements Command {
     turtle.setPosition(turtle.getPosition().added(delta));
     double x1 = turtle.getPosition().getX();
     double y1 = turtle.getPosition().getY();
-    System.out.println("TURTLE COLOR IS " + turtle.getColor());
+    //System.out.println("TURTLE COLOR IS " + turtle.getColor());
     painter.drawLine(x0, y0, x1, y1, turtle.getColor(), 1);
   }
 

@@ -231,7 +231,7 @@ public class ArrayIndexedCollection<E> implements List<E> {
     while (size + length > newSize)
       newSize *= 2;
     var tmp = elements;
-    elements = newSize != elements.length ? (E[]) new Object[newSize] : elements;
+    elements = newSize != elements.length ? new Object[newSize] : elements;
 
     // Copying to new array (or old one if there was enough room)
     System.arraycopy(tmp, 0, elements, 0, offset);

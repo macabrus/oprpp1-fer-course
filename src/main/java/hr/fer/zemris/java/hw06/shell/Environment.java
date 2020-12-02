@@ -7,10 +7,11 @@ public interface Environment {
   void write(String text) throws ShellIOException;
   void writeln(String text) throws ShellIOException;
   SortedMap<String, ShellCommand> commands();
-  Character getMultilineSymbol();
-  void setMultilineSymbol(String symbol);
+  Character getMultilineContinuationPrompt();
+  void setMultilineChar(Character symbol);
+
+  void setMultilineSymbol(Character symbol);
   String getPromptSymbol();
   void setPromptSymbol(String symbol);
-  Character getMorelinesSymbol();
-  void setMorelinesSymbol(Character symbol);
+  Character getMultilineChar();
 }

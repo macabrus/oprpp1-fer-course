@@ -1,28 +1,26 @@
 package hr.fer.oprpp1;
 
-import hr.fer.oprpp1.custom.Prompt;
+import hr.fer.zemris.java.hw06.shell.Prompt;
 
 import javax.crypto.Cipher;
 import javax.crypto.NoSuchPaddingException;
-import java.io.ByteArrayInputStream;
-import java.nio.charset.StandardCharsets;
 import java.security.NoSuchAlgorithmException;
 
 public class Crypto {
 
   public static void main(String[] args) throws NoSuchAlgorithmException, NoSuchPaddingException {
-    Prompt prompt = new Prompt("crypto > "); // interactive mode
-    prompt.registerAction("checksha", new CheckSHAAction("SHA-256"));
-    prompt.registerAction("encrypt", new CipherAction("AES/CBC/PKCS5Padding", Cipher.ENCRYPT_MODE));
-    prompt.registerAction("decrypt", new CipherAction("AES/CBC/PKCS5Padding", Cipher.DECRYPT_MODE));
-    prompt.setExitAction("exit");
-    if (!(args.length > 0))
-      throw new IllegalArgumentException("Expected one of following arguments: " +
-        String.join(", ", prompt.getActions().keySet()));
+//    Prompt prompt = new Prompt("crypto > "); // interactive mode
+//    prompt.registerAction("checksha", new CheckSHAAction("SHA-256"));
+//    prompt.registerAction("encrypt", new CipherAction("AES/CBC/PKCS5Padding", Cipher.ENCRYPT_MODE));
+//    prompt.registerAction("decrypt", new CipherAction("AES/CBC/PKCS5Padding", Cipher.DECRYPT_MODE));
+//    prompt.setExitAction("exit");
+//    if (!(args.length > 0))
+//      throw new IllegalArgumentException("Expected one of following arguments: " +
+//        String.join(", ", prompt.getActions().keySet()));
 
 //    prompt.setInputStream(new ByteArrayInputStream(String.join(" ", args).getBytes(StandardCharsets.UTF_8)));
-    prompt.setInputStream(System.in);
-    prompt.perform(null);
+//    prompt.setInputStream(System.in);
+//    prompt.executeCommand();
 
     // encrypt /Users/bernard/Downloads/tus_module.zip /Users/bernard/Downloads/tus_module.zip.crypt
     // decrypt /Users/bernard/Downloads/tus_module.zip.crypt /Users/bernard/Downloads/tus_module.orig.zip

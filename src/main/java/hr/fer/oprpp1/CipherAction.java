@@ -1,6 +1,9 @@
 package hr.fer.oprpp1;
 
-import hr.fer.oprpp1.custom.Action;
+import hr.fer.zemris.java.hw06.shell.CommandParser;
+import hr.fer.zemris.java.hw06.shell.Environment;
+import hr.fer.zemris.java.hw06.shell.ShellCommand;
+import hr.fer.zemris.java.hw06.shell.ShellStatus;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
@@ -17,11 +20,12 @@ import java.security.NoSuchAlgorithmException;
 import java.security.spec.AlgorithmParameterSpec;
 import java.util.Scanner;
 
-public class CipherAction implements Action {
+public class CipherAction implements ShellCommand {
 
   private String spec;
   private final int mode;
   private Cipher cipher;
+  private CommandParser parser;
 
   public CipherAction(String spec, int mode) throws NoSuchPaddingException, NoSuchAlgorithmException {
     this.spec = spec;
@@ -29,8 +33,22 @@ public class CipherAction implements Action {
     cipher = Cipher.getInstance(spec);
   }
 
+
+  private String askPassword() {
+    System.out.println("Please provide password as hex-encoded text (16 bytes, i.e. 32 hex-digits):");
+    System.out.print(" > ");
+    return new Scanner(System.in).next();
+  }
+
+  private String askInitVector() {
+    System.out.println("Please provide initialization vector as hex-encoded text (32 hex-digits):");
+    System.out.print(" > ");
+    return new Scanner(System.in).next();
+  }
+
   @Override
-  public void perform(String[] args) {
+  public ShellStatus executeCommand(Environment env, String arguments) {
+    var args = parser.parse(arguments);
     if (args.length != 2)
       throw new IllegalArgumentException("Expected 2 arguments: <source_filename> <encrypted_filename>");
 
@@ -61,17 +79,11 @@ public class CipherAction implements Action {
     } catch (IOException | BadPaddingException | IllegalBlockSizeException e) {
       e.printStackTrace();
     }
+    return ShellStatus.CONTINUE;
   }
 
-  private String askPassword() {
-    System.out.println("Please provide password as hex-encoded text (16 bytes, i.e. 32 hex-digits):");
-    System.out.print(" > ");
-    return new Scanner(System.in).next();
-  }
-
-  private String askInitVector() {
-    System.out.println("Please provide initialization vector as hex-encoded text (32 hex-digits):");
-    System.out.print(" > ");
-    return new Scanner(System.in).next();
+  @Override
+  public void setCommandParser(CommandParser parser) {
+    this.parser = parser;
   }
 }

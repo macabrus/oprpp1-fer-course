@@ -12,18 +12,17 @@ import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.Scanner;
 
-public class CheckSHAAction implements ShellCommand {
+public class CheckSHACommand implements ShellCommand {
 
   private MessageDigest md;
   private String spec;
   private CommandParser parser;
 
-  public CheckSHAAction(String spec) throws NoSuchAlgorithmException {
+  public CheckSHACommand(String spec, CommandParser parser) throws NoSuchAlgorithmException {
     this.spec = spec;
-    md = MessageDigest.getInstance(spec);
+    this.md = MessageDigest.getInstance(spec);
+    this.parser = parser;
   }
-
-
 
   private String promptExpectedChecksum(String file) {
     System.out.println("Please provide expected sha-256 digest for %s:".formatted(file));
@@ -66,8 +65,4 @@ public class CheckSHAAction implements ShellCommand {
     return null;
   }
 
-  @Override
-  public void setCommandParser(CommandParser parser) {
-    this.parser = parser;
-  }
 }

@@ -27,10 +27,11 @@ public class CipherAction implements ShellCommand {
   private Cipher cipher;
   private CommandParser parser;
 
-  public CipherAction(String spec, int mode) throws NoSuchPaddingException, NoSuchAlgorithmException {
+  public CipherAction(String spec, int mode, CommandParser parser) throws NoSuchPaddingException, NoSuchAlgorithmException {
     this.spec = spec;
     this.mode = mode;
-    cipher = Cipher.getInstance(spec);
+    this.cipher = Cipher.getInstance(spec);
+    this.parser = parser;
   }
 
 
@@ -82,8 +83,4 @@ public class CipherAction implements ShellCommand {
     return ShellStatus.CONTINUE;
   }
 
-  @Override
-  public void setCommandParser(CommandParser parser) {
-    this.parser = parser;
-  }
 }

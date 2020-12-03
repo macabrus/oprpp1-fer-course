@@ -19,7 +19,7 @@ public class CommandParserFactory {
   /**
    * @return singleton instance of this factory
    */
-  public CommandParserFactory getInstance() {
+  public static CommandParserFactory getInstance() {
     return INSTANCE;
   }
 
@@ -34,8 +34,8 @@ public class CommandParserFactory {
   public CommandParser getDefault() {
     return new CommandParser() {
       private final Pattern[] expressions = new Pattern[]{
-        Pattern.compile("\\s*(?<target>\\w+)\\s*"),
-        Pattern.compile("\\s*\"(?<target>[^\"]*)\"\\s*")
+        Pattern.compile("\\s*\"(?<target>[^\"]*)\"\\s*"),
+        Pattern.compile("\\s*(?<target>[^\\s]+)\\s*"),
       };
       @Override
       public String[] parse(String line) {

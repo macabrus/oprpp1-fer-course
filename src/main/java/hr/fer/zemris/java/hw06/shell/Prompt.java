@@ -92,13 +92,15 @@ public class Prompt implements ShellCommand, Environment {
     return ShellStatus.CONTINUE; // in case this is a subshell -> parent shell continues normal execution
   }
 
+  private Scanner sc;
   /**
    * @return line to be consumed
    * @throws ShellIOException if there was a problem while reading a stream
    */
   @Override
   public String readLine() throws ShellIOException {
-    var sc = new Scanner(in);
+    if (sc == null)
+      sc = new Scanner(in);
     var sb = new StringBuilder();
     while (sc.hasNextLine()) {
       var part = sc.nextLine();

@@ -26,6 +26,7 @@ public class HexdumpCommand implements ShellCommand {
       int currentChar = 0; // current char position in buffer to print
       int currentBlockLen = 0; // current block length, at 16, it resets
       while ( (readCount = in.read(b)) != -1) {
+        currentChar = 0;
         while (readCount != currentChar) {
           if (currentChar % 16 == 0)
             env.write("%08X".formatted(currentChar) + ":");
@@ -45,7 +46,6 @@ public class HexdumpCommand implements ShellCommand {
             currentBlockLen = 0;
           }
         }
-        currentChar = 0;
       }
       // last pad if block was not full
       if (currentBlockLen % 16 != 0) {

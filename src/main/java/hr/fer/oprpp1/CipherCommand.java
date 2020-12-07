@@ -18,16 +18,22 @@ import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.AlgorithmParameterSpec;
-import java.util.Scanner;
 
-public class CipherAction implements ShellCommand {
+/**
+ * AES cipher shell command. It can be registered
+ * to some implementation of Prompt shell and used
+ * interactively as a subshell. However, it only
+ * has two prompts so I didn't see a point in implementing
+ * special subshell for this command.
+ */
+public class CipherCommand implements ShellCommand {
 
   private String spec;
   private final int mode;
   private Cipher cipher;
   private CommandParser parser;
 
-  public CipherAction(String spec, int mode, CommandParser parser) throws NoSuchPaddingException, NoSuchAlgorithmException {
+  public CipherCommand(String spec, int mode, CommandParser parser) throws NoSuchPaddingException, NoSuchAlgorithmException {
     this.spec = spec;
     this.mode = mode;
     this.cipher = Cipher.getInstance(spec);
@@ -35,26 +41,26 @@ public class CipherAction implements ShellCommand {
   }
 
 
-  private String askPassword() {
-    System.out.println("Please provide password as hex-encoded text (16 bytes, i.e. 32 hex-digits):");
-    System.out.print(" > ");
-    return new Scanner(System.in).next();
+  private String askPassword(Environment env) {
+    env.writeln("Please provide password as hex-encoded text (16 bytes, i.e. 32 hex-digits):");
+    env.write(" > ");
+    return env.readLine();
   }
 
-  private String askInitVector() {
-    System.out.println("Please provide initialization vector as hex-encoded text (32 hex-digits):");
-    System.out.print(" > ");
-    return new Scanner(System.in).next();
+  private String askInitVector(Environment env) {
+    env.writeln("Please provide initialization vector as hex-encoded text (32 hex-digits):");
+    env.write(" > ");
+    return env.readLine();
   }
 
   @Override
   public ShellStatus executeCommand(Environment env, String arguments) {
     var args = parser.parse(arguments);
     if (args.length != 2)
-      throw new IllegalArgumentException("Expected 2 arguments: <source_filename> <encrypted_filename>");
+      env.writeln("Expected 2 arguments: <source_filename> <encrypted_filename>");
 
-    var pass = Util.hexToBuff(askPassword());
-    var iv = Util.hexToBuff(askInitVector());
+    var pass = Util.hexToBuff(askPassword(env));
+    var iv = Util.hexToBuff(askInitVector(env));
 
     SecretKeySpec keySpec = new SecretKeySpec(pass, "AES");
     AlgorithmParameterSpec paramSpec = new IvParameterSpec(iv);
@@ -62,7 +68,8 @@ public class CipherAction implements ShellCommand {
     try {
       cipher.init(mode, keySpec, paramSpec);
     } catch (InvalidKeyException | InvalidAlgorithmParameterException e) {
-      e.printStackTrace();
+      //e.printStackTrace();
+
     }
 
     try(var in = new FileInputStream(args[0]);
@@ -78,7 +85,8 @@ public class CipherAction implements ShellCommand {
       out.write(last);
       out.flush();
     } catch (IOException | BadPaddingException | IllegalBlockSizeException e) {
-      e.printStackTrace();
+      //e.printStackTrace();
+      env.writeln("File %s could not be encrypted because it doesn't exist.");
     }
     return ShellStatus.CONTINUE;
   }

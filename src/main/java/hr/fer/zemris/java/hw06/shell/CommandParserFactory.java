@@ -56,8 +56,17 @@ public class CommandParserFactory {
     };
   }
 
-  public static void main(String[] args) {
-    // example usage
-    System.out.println(Arrays.toString(INSTANCE.getDefault().parse("this is an \"fdg \\ /d/dfg df g\" command")));
+  /**
+   * Simple default prompt parser which just separates first word from rest of line.
+   * @return
+   */
+  public CommandParser getDefaultPromptParser() {
+    return line -> {
+      line = line.stripLeading();
+      var firstSpace = line.indexOf(" ");
+      if (firstSpace == -1)
+        return new String [] {line, ""};
+      return new String[] {line.substring(0, firstSpace), line.substring(firstSpace)};
+    };
   }
 }

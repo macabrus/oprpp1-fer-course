@@ -5,15 +5,8 @@ import java.nio.charset.Charset;
 public class MyShell {
 
   public static void main(String[] args) {
-    // default parser definition for prompt commands
-    CommandParser promptParser = line -> {
-      line = line.stripLeading();
-      var firstSpace = line.indexOf(" ");
-      if (firstSpace == -1)
-        return new String [] {line, ""};
-      return new String[] {line.substring(0, firstSpace), line.substring(firstSpace)};
-    };
-
+    // getting default prompt parser, can be re-implemented as something else
+    var promptParser = CommandParserFactory.getInstance().getDefaultPromptParser();
     // default prompt for shell
     var prompt = new Prompt(" MyShell (v1.0) > ", promptParser);
 

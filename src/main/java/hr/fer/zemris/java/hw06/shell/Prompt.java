@@ -12,6 +12,15 @@ import java.util.*;
  */
 public class Prompt implements ShellCommand, Environment {
 
+  /**
+   * Contains environment variables that can be changed at runtime and
+   * are used as shell is working. Shell passes whole environment to
+   * child processes (sub-commands) while it is itself a entry command.
+   *
+   * This map could be used in future to hold CWD variable to keep current
+   * path context which could be changed by registering UNIX-style command "cd"
+   * for changing directories.
+   */
   private Map<String, String> ENVIRONMENT_VARS = new HashMap<>() {{
     put("PROMPT", " > ");
     put("MULTILINE", " | ");
@@ -34,11 +43,11 @@ public class Prompt implements ShellCommand, Environment {
     this.parser = parser;
   }
 
-  void setOut(OutputStream out) {
+  public void setOut(OutputStream out) {
     this.out = out;
   }
 
-  void setIn(InputStream in) {
+  public void setIn(InputStream in) {
     this.in = in;
   }
 
@@ -66,7 +75,10 @@ public class Prompt implements ShellCommand, Environment {
   public ShellStatus executeCommand(Environment env, String arguments) {
     while (true) {
       env.write(env.getPromptSymbol());
-      var cmd = parser.parse(readLine());
+      var line = readLine();
+      if (line == null)
+        return ShellStatus.CONTINUE;
+      var cmd = parser.parse(line);
       if (cmd[0].equals(""))
         continue;
       if (!commands.containsKey(cmd[0])) // command not registered
@@ -80,11 +92,15 @@ public class Prompt implements ShellCommand, Environment {
     return ShellStatus.CONTINUE; // in case this is a subshell -> parent shell continues normal execution
   }
 
+  /**
+   * @return line to be consumed
+   * @throws ShellIOException if there was a problem while reading a stream
+   */
   @Override
   public String readLine() throws ShellIOException {
     var sc = new Scanner(in);
     var sb = new StringBuilder();
-    while (true) {
+    while (sc.hasNextLine()) {
       var part = sc.nextLine();
       if (part.matches(".*\\" + ENVIRONMENT_VARS.get("MORELINES") + "\\s*$")) {
         sb.append(part.replaceFirst("\\" + ENVIRONMENT_VARS.get("MORELINES") + "\\s*$", ""));
@@ -95,6 +111,7 @@ public class Prompt implements ShellCommand, Environment {
         return sb.toString();
       }
     }
+    return null;
   }
 
   @Override
@@ -108,6 +125,8 @@ public class Prompt implements ShellCommand, Environment {
 
   @Override
   public void writeln(String text) throws ShellIOException {
+    // TODO: wrap in PrintWriter which can automatically insert system default line endings
+    // depending on platform
     try {
       out.write((text + '\n').getBytes());
     } catch (IOException e) {

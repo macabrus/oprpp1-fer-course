@@ -41,18 +41,18 @@ public class TreeCommand implements ShellCommand {
         @Override
         public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
           writeName(dir);
-          indent += 1;
+          indent ++;
           return super.preVisitDirectory(dir, attrs);
         }
 
         @Override
         public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
-          indent -= 1;
+          indent --;
           return super.postVisitDirectory(dir, exc);
         }
       });
     } catch (IOException e) {
-      e.printStackTrace();
+      env.writeln("An error occured while listing directory tree.");
     }
     return ShellStatus.CONTINUE;
   }

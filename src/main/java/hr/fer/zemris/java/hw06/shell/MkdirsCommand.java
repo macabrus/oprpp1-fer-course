@@ -1,9 +1,6 @@
 package hr.fer.zemris.java.hw06.shell;
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 
 public class MkdirsCommand implements ShellCommand {
 
@@ -20,7 +17,8 @@ public class MkdirsCommand implements ShellCommand {
       env.writeln("Expected single arguments <dir_name>.");
       return ShellStatus.CONTINUE;
     }
-    new File(args[0]).mkdirs();
+    if (!new File(args[0]).mkdirs())
+      env.writeln("Directory couldn't be created.");
     return ShellStatus.CONTINUE;
   }
 }

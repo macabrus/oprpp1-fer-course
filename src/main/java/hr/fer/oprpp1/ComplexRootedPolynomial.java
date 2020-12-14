@@ -11,7 +11,6 @@ public class ComplexRootedPolynomial {
     if (roots == null || roots.length == 0) {
       throw new IllegalArgumentException("Polynomial must have at least one root");
     }
-    System.out.println(Arrays.toString(roots));
     this.roots = roots;
     this.constant = constant;
   }

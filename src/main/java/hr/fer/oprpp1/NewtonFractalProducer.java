@@ -55,7 +55,6 @@ public class NewtonFractalProducer implements IFractalProducer {
           try {
             job = q.take();
             if (job == NewtonFractalJob.NO_JOB){
-              System.out.println(Thread.currentThread().getId() + " umire");
               break;
             }
           } catch (InterruptedException e) {
@@ -73,7 +72,6 @@ public class NewtonFractalProducer implements IFractalProducer {
     for(int i = 0; i < tracks; i++) {
       int yMin = i * brojYPoTraci;
       int yMax = (i+1)*brojYPoTraci-1;
-      System.out.println("from " + yMin + " to " + yMax);
       if(i==tracks-1) {
         yMax = height-1;
       }

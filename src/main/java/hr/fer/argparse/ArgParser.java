@@ -35,7 +35,6 @@ public class ArgParser {
         parsed.put(kv[0], kv[1]);
       }
     }
-    System.out.println(parsed);
     return parsed;
   }
 }

@@ -1,18 +1,18 @@
-package hr.fer.zemris.java.gui.prim;
+package hr.fer.zemris.java.gui.prime;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-public class PrimDemo {
+public class PrimeDemo {
 
   private static PrimeListModel m = new PrimeListModelImpl();
 
   public static void main(String[] args) {
     // two example windows
-    SwingUtilities.invokeLater(PrimDemo::genWindow);
-    SwingUtilities.invokeLater(PrimDemo::genWindow);
+    SwingUtilities.invokeLater(PrimeDemo::genWindow);
+    SwingUtilities.invokeLater(PrimeDemo::genWindow);
   }
 
   private static JFrame genWindow() {

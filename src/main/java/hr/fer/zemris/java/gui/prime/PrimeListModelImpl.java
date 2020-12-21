@@ -1,4 +1,4 @@
-package hr.fer.zemris.java.gui.prim;
+package hr.fer.zemris.java.gui.prime;
 
 import javax.swing.event.ListDataEvent;
 import javax.swing.event.ListDataListener;

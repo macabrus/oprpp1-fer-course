@@ -10,6 +10,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 
 public class DefaultMultipleDocumentModel extends JTabbedPane implements MultipleDocumentModel, ILocalizationListener {
 
@@ -21,6 +22,20 @@ public class DefaultMultipleDocumentModel extends JTabbedPane implements Multipl
   public DefaultMultipleDocumentModel(ILocalizationProvider provider) {
     l10nProvider = provider;
     provider.addLocalizationListener(this);
+    addChangeListener(e -> {
+      if (e.getSource() instanceof JTabbedPane) {
+        JTabbedPane pane = (JTabbedPane) e.getSource();
+        System.out.println("Selected doc #: " + pane.getSelectedIndex());
+        setCurrentDoc(currentDoc, pane.getSelectedIndex());
+      }
+    });
+  }
+
+  private void setCurrentDoc(SingleDocumentModel old, int newIndex) {
+    var tmp = currentDoc;
+    this.currentDoc = newIndex >= 0 ? docs.get(newIndex) : null;
+    setSelectedIndex(docs.indexOf(currentDoc));
+    listeners.forEach(l -> l.currentDocumentChanged(tmp, currentDoc));
   }
 
   @Override
@@ -28,8 +43,9 @@ public class DefaultMultipleDocumentModel extends JTabbedPane implements Multipl
     var doc = new DefaultSingleDocumentModel(null, "");
     docs.add(doc);
     add(l10nProvider.getString("unnamed_doc"), new JScrollPane(doc.getTextComponent()));
-    setCurrentDoc(doc);
+    setCurrentDoc(currentDoc, docs.size() - 1); // Last added
     listeners.forEach(l -> l.documentAdded(doc));
+    addModificationListener(doc);
     return doc;
   }
 
@@ -40,11 +56,20 @@ public class DefaultMultipleDocumentModel extends JTabbedPane implements Multipl
 
   @Override
   public SingleDocumentModel loadDocument(Path path) throws IOException {
+    var sameDoc = docs.stream()
+      .filter(d -> Objects.equals(path, d.getFilePath()))
+      .findFirst()
+      .orElse(null);
+    if (sameDoc != null){
+      setCurrentDoc(getCurrentDocument(), docs.indexOf(sameDoc));
+      return getCurrentDocument();
+    }
     var doc = new DefaultSingleDocumentModel(path.toString(), Files.readString(path));
     docs.add(doc);
     add(doc.getFilePath().toString(), new JScrollPane(doc.getTextComponent()));
-    setCurrentDoc(doc);
+    setCurrentDoc(currentDoc, docs.size() - 1); // Last added is in focus
     listeners.forEach(l -> l.documentAdded(doc));
+    addModificationListener(doc);
     return doc;
   }
 
@@ -60,10 +85,10 @@ public class DefaultMultipleDocumentModel extends JTabbedPane implements Multipl
   @Override
   public void closeDocument(SingleDocumentModel model) {
     var index = docs.indexOf(model);
-    docs.remove(index);
+    var closedDoc = docs.remove(index);
     removeTabAt(index);
-    if (!docs.isEmpty())
-      setCurrentDoc(docs.get(docs.size()-1));
+    setCurrentDoc(closedDoc, docs.size() - 1);
+    listeners.forEach(l -> l.documentRemoved(closedDoc));
   }
 
   @Override
@@ -91,17 +116,43 @@ public class DefaultMultipleDocumentModel extends JTabbedPane implements Multipl
     return docs.iterator();
   }
 
+  /**
+   * When localization changes,
+   * component refreshes
+   */
   @Override
   public void localizationChanged() {
-    for (int i = 0; i < docs.size(); i++) {
-      var path = docs.get(i).getFilePath() != null ? docs.get(i).getFilePath().toString() : null;
-      setTitleAt(i, path == null ? l10nProvider.getString("unnamed_doc") : path);
-    }
+    // This will trigger notification for localization provider
+    docs.forEach(d -> d.setFilePath(d.getFilePath()));
+    // for (int i = 0; i < docs.size(); i++) {
+    //   var path = docs.get(i).getFilePath() != null ? docs.get(i).getFilePath().toString() : null;
+    //   setTitleAt(i, path == null ? l10nProvider.getString("unnamed_doc") : path);
+    // }
   }
 
-  public void setCurrentDoc(SingleDocumentModel currentDoc) {
-    this.currentDoc = currentDoc;
-    setSelectedIndex(docs.indexOf(currentDoc));
+  /**
+   * Attaches listener to every Single document submodel
+   */
+  private void addModificationListener(SingleDocumentModel doc) {
+    doc.getTextComponent().addCaretListener(e -> listeners.forEach(l -> l.currentDocumentChanged(currentDoc, currentDoc)));
+    doc.addSingleDocumentListener(new SingleDocumentListener() {
+
+      @Override
+      public void documentModifyStatusUpdated(SingleDocumentModel model) {
+        if (model.isModified())
+          setIconAt(docs.indexOf(model), UIManager.getIcon("FileView.floppyDriveIcon"));
+        else
+          setIconAt(docs.indexOf(model), null);
+      }
+
+      @Override
+      public void documentFilePathUpdated(SingleDocumentModel model) {
+        if (model.getFilePath() == null)
+          setTitleAt(docs.indexOf(model), l10nProvider.getString("unnamed_doc"));
+        else
+          setTitleAt(docs.indexOf(model), model.getFilePath().toString());
+      }
+    });
   }
 
 }

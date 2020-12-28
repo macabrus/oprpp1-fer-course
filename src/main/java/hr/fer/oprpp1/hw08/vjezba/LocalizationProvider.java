@@ -29,4 +29,7 @@ public class LocalizationProvider extends AbstractLocalizationProvider {
     fire(); // Notify listeners on change
   }
 
+  public String getLanguage() {
+    return language;
+  }
 }

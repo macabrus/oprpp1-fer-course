@@ -54,10 +54,11 @@ public class DefaultSingleDocumentModel implements SingleDocumentModel {
 
   @Override
   public void setFilePath(Path path) {
-    if (path == null)
-      throw new NullPointerException("File path can not be null!");
+    // if (path == null)
+    //   throw new NullPointerException("File path can not be null!");
 
     this.path = path;
+    listeners.forEach(l -> l.documentFilePathUpdated(this));
   }
 
   @Override

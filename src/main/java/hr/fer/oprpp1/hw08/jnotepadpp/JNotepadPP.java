@@ -96,6 +96,9 @@ public class JNotepadPP extends JFrame {
     lang.add(new JMenuItem("EN") {{
       addActionListener(e -> LocalizationProvider.getInstance().setLanguage("en"));
     }});
+    lang.add(new JMenuItem("DE") {{
+      addActionListener(e -> LocalizationProvider.getInstance().setLanguage("de"));
+    }});
 
     // var panel = new JPanel();
     // panel.setLayout(new BoxLayout(panel,BoxLayout.PAGE_AXIS));

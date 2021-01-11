@@ -23,7 +23,7 @@ public abstract class SortAction extends DocumentAction {
     var content = model.getCurrentDocument().getTextComponent().getText().split(System.lineSeparator());
     var area = model.getCurrentDocument().getTextComponent();
     try {
-      var lineStart = area.getText(0, area.getSelectionStart()).split(System.lineSeparator()).length - 1;
+      var lineStart = area.getText(0, area.getSelectionStart()).split(System.lineSeparator()).length;
       var lineEnd = area.getText(0, area.getSelectionEnd() - 1).split(System.lineSeparator()).length;
       var collator = provideComparator();
       Arrays.sort(content, lineStart, lineEnd, collator);

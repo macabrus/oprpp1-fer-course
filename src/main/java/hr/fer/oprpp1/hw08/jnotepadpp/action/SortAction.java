@@ -2,15 +2,12 @@ package hr.fer.oprpp1.hw08.jnotepadpp.action;
 
 import hr.fer.oprpp1.hw08.jnotepadpp.model.MultipleDocumentModel;
 import hr.fer.oprpp1.hw08.vjezba.ILocalizationProvider;
-import hr.fer.oprpp1.hw08.vjezba.LocalizationProvider;
 
 import javax.swing.*;
 import javax.swing.text.BadLocationException;
 import java.awt.event.ActionEvent;
-import java.text.Collator;
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.Locale;
 
 public abstract class SortAction extends DocumentAction {
 

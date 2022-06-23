@@ -1,0 +1,6 @@
+/*.iml
+/.idea/
+/target/
+**/*.pdf
+/*.zip
+**/*.DS_Store

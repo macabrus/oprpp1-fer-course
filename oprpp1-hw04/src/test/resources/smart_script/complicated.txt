@@ -1,0 +1,19 @@
+{$ FOR a 0 10$}
+    first
+    {$= @someFun"d"@anotherFun-35.343-.354-345.+-*/
+    $}
+    second
+    {$ FOR i j k l $}
+        nested1
+        {$ FOR i-2"3"4 $}
+            double nested!
+            {$ FOR varname varname 34 34 $}
+                inception is a good movie
+            {$
+            END
+            $}
+            double nested #2!
+        {$ END $}
+        nested2
+    {$ END $}
+{$ END $}
